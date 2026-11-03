@@ -37,49 +37,45 @@ public:
     }
 };
 
-// ==================== Function Definitions ====================
+// ==================== Function Prototypes ====================
 void showMenu();
 void listTasks(const std::vector<Task>& tasks);
+void addTask(std::vector<Task>& tasks);
+void completeTask(std::vector<Task>& tasks);
+void deleteTask(std::vector<Task>& tasks);
 
 // ==================== Main ====================
 int main() {
     std::vector<Task> tasks;
     int choice = 0;
 
-    // Main program loop
     while (true) {
         showMenu();
         std::cout << "Enter your choice: ";
         std::cin >> choice;
-
-        // Clear the input buffer after reading a number
-        std::cin.ignore(10000, '\n');
+        std::cin.ignore(10000, '\n');   // clear input buffer
 
         if (choice == 1) {
-            // Feature to be implemented later
-            std::cout << "The feature for adding tasks is coming soon...\n";
+            addTask(tasks);
         }
         else if (choice == 2) {
             listTasks(tasks);
         }
         else if (choice == 3) {
-            // Feature to be implemented later
-            std::cout << "The feature for marking tasks as complete is coming soon...\n";
+            completeTask(tasks);
         }
         else if (choice == 4) {
-            // Feature to be implemented later
-            std::cout << "The feature for deleting tasks is coming soon...\n";
+            deleteTask(tasks);
         }
         else if (choice == 5) {
             std::cout << "Goodbye!\n";
-            // Exiting the program
             break;
         }
         else {
             std::cout << "Invalid choice. Please try again.\n";
         }
 
-        std::cout << std::endl; 
+        std::cout << std::endl;
     }
 
     return 0;
@@ -87,7 +83,6 @@ int main() {
 
 // ==================== Functions ====================
 
-/// Displays the main menu options to the user.
 void showMenu() {
     std::cout << "===== To-Do List Manager =====\n";
     std::cout << "1. Add Task\n";
@@ -104,7 +99,66 @@ void listTasks(const std::vector<Task>& tasks) {
     }
 
     std::cout << "\n----- Your Tasks -----\n";
-    for (int i = 0; i < tasks.size(); i++) {
+    for (size_t i = 0; i < tasks.size(); i++) {
         tasks[i].display(i + 1);
     }
+}
+
+void addTask(std::vector<Task>& tasks) {
+    std::string description;
+    std::cout << "Enter task description: ";
+    std::getline(std::cin, description);
+
+    if (description.empty()) {
+        std::cout << "Task description cannot be empty.\n";
+        return;
+    }
+
+    tasks.push_back(Task(description));
+    std::cout << "Task added successfully!\n";
+}
+
+void completeTask(std::vector<Task>& tasks) {
+    if (tasks.empty()) {
+        std::cout << "No tasks to complete.\n";
+        return;
+    }
+
+    listTasks(tasks);
+
+    int index;
+    std::cout << "Enter the number of the task to mark as complete: ";
+    std::cin >> index;
+    std::cin.ignore(10000, '\n');
+
+    // Convert to 0-based index and check validity
+    if (index < 1 || index > static_cast<int>(tasks.size())) {
+        std::cout << "Invalid task number.\n";
+        return;
+    }
+
+    tasks[index - 1].markComplete();
+    std::cout << "Task marked as complete!\n";
+}
+
+void deleteTask(std::vector<Task>& tasks) {
+    if (tasks.empty()) {
+        std::cout << "No tasks to delete.\n";
+        return;
+    }
+
+    listTasks(tasks);
+
+    int index;
+    std::cout << "Enter the number of the task to delete: ";
+    std::cin >> index;
+    std::cin.ignore(10000, '\n');
+
+    if (index < 1 || index > static_cast<int>(tasks.size())) {
+        std::cout << "Invalid task number.\n";
+        return;
+    }
+
+    tasks.erase(tasks.begin() + (index - 1));
+    std::cout << "Task deleted successfully!\n";
 }
