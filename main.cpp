@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <vector>
 
 // ==================== Task Class ====================
 class Task {
@@ -29,7 +30,7 @@ public:
         return description;
     }
 
-    // Displaying the task
+    // Displaying the tasks
     void display(int index) const {
         std::cout << index << ". ";
         if (completed) {
@@ -43,20 +44,29 @@ public:
 
 // ==================== Main ====================
 int main() {
-    // Just testing the class for now
-    Task task1("Learn C++ classes");
-    Task task2("Build a to-do list");
+    // Creating a vector that will hold Task objects
+    std::vector<Task> tasks;
 
-    std::cout << "\nT0-Do List Manager" << std::endl;
+    // Adding my tasks for this week
+    tasks.push_back(Task("Complete Week 2 Soft Skills Assignment"));
+    tasks.push_back(Task("Practice using vectors in C++"));
+    tasks.push_back(Task("Attend Institute class on Thursday"));
 
-    task1.display(1);
-    task2.display(2);
+    // Display all tasks using a for loop and expression indexing
+    std::cout << "===== My To-Do List =====\n";
+    for ( int i = 0; i < tasks.size(); i++) {
+        tasks[i].display(i + 1);
+    }
 
-    std::cout << "\nMarking first task as complete...\n";
-    task1.markComplete();
+    // Mark the second task as complete
+    std::cout << "\nMarking task 2 as complete...\n";
+    tasks[1].markComplete();
 
-    task1.display(1);
-    task2.display(2);
+    // Display again
+    std::cout << "\n===== Updated List =====\n";
+    for (int i = 0; i < tasks.size(); i++) {
+        tasks[i].display(i + 1);
+    }
 
     return 0;
 }
