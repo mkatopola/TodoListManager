@@ -9,28 +9,23 @@ private:
     bool completed;
 
 public:
-    // Constructor
     Task(const std::string& desc) {
         description = desc;
         completed = false;
     }
 
-    // Marking the task as complete
     void markComplete() {
         completed = true;
     }
 
-    // Checking if the task is completed
     bool isCompleted() const {
         return completed;
     }
 
-    // Getting the description
     std::string getDescription() const {
         return description;
     }
 
-    // Displaying the tasks
     void display(int index) const {
         std::cout << index << ". ";
         if (completed) {
@@ -42,31 +37,74 @@ public:
     }
 };
 
+// ==================== Function Definitions ====================
+void showMenu();
+void listTasks(const std::vector<Task>& tasks);
+
 // ==================== Main ====================
 int main() {
-    // Creating a vector that will hold Task objects
     std::vector<Task> tasks;
+    int choice = 0;
 
-    // Adding my tasks for this week
-    tasks.push_back(Task("Complete Week 2 Soft Skills Assignment"));
-    tasks.push_back(Task("Practice using vectors in C++"));
-    tasks.push_back(Task("Attend Institute class on Thursday"));
+    // Main program loop
+    while (true) {
+        showMenu();
+        std::cout << "Enter your choice: ";
+        std::cin >> choice;
 
-    // Display all tasks using a for loop and expression indexing
-    std::cout << "===== My To-Do List =====\n";
-    for ( int i = 0; i < tasks.size(); i++) {
-        tasks[i].display(i + 1);
-    }
+        // Clear the input buffer after reading a number
+        std::cin.ignore(10000, '\n');
 
-    // Mark the second task as complete
-    std::cout << "\nMarking task 2 as complete...\n";
-    tasks[1].markComplete();
+        if (choice == 1) {
+            // Feature to be implemented later
+            std::cout << "The feature for adding tasks is coming soon...\n";
+        }
+        else if (choice == 2) {
+            listTasks(tasks);
+        }
+        else if (choice == 3) {
+            // Feature to be implemented later
+            std::cout << "The feature for marking tasks as complete is coming soon...\n";
+        }
+        else if (choice == 4) {
+            // Feature to be implemented later
+            std::cout << "The feature for deleting tasks is coming soon...\n";
+        }
+        else if (choice == 5) {
+            std::cout << "Goodbye!\n";
+            // Exiting the program
+            break;
+        }
+        else {
+            std::cout << "Invalid choice. Please try again.\n";
+        }
 
-    // Display again
-    std::cout << "\n===== Updated List =====\n";
-    for (int i = 0; i < tasks.size(); i++) {
-        tasks[i].display(i + 1);
+        std::cout << std::endl; 
     }
 
     return 0;
+}
+
+// ==================== Functions ====================
+
+/// Displays the main menu options to the user.
+void showMenu() {
+    std::cout << "===== To-Do List Manager =====\n";
+    std::cout << "1. Add Task\n";
+    std::cout << "2. List Tasks\n";
+    std::cout << "3. Mark Task as Complete\n";
+    std::cout << "4. Delete Task\n";
+    std::cout << "5. Exit\n";
+}
+
+void listTasks(const std::vector<Task>& tasks) {
+    if (tasks.empty()) {
+        std::cout << "No tasks yet.\n";
+        return;
+    }
+
+    std::cout << "\n----- Your Tasks -----\n";
+    for (int i = 0; i < tasks.size(); i++) {
+        tasks[i].display(i + 1);
+    }
 }
