@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <fstream>   // for file operations
 
 using namespace std;
 
@@ -11,9 +12,9 @@ private:
     bool completed;
 
 public:
-    Task(const string& desc) {
+    Task(const string& desc, bool isCompleted = false) {
         description = desc;
-        completed = false;
+        completed = isCompleted;
     }
 
     void markComplete() {
@@ -45,17 +46,23 @@ void listTasks(const vector<Task>& tasks);
 void addTask(vector<Task>& tasks);
 void completeTask(vector<Task>& tasks);
 void deleteTask(vector<Task>& tasks);
+void saveTasks(const vector<Task>& tasks);
+void loadTasks(vector<Task>& tasks);
 
 // ==================== Main ====================
 int main() {
     vector<Task> tasks;
+
+    // Load existing tasks at startup
+    loadTasks(tasks);
+
     int choice = 0;
 
     while (true) {
         showMenu();
         cout << "Enter your choice: ";
         cin >> choice;
-        cin.ignore(10000, '\n');   // clear input buffer
+        cin.ignore(10000, '\n');
 
         if (choice == 1) {
             addTask(tasks);
@@ -70,7 +77,8 @@ int main() {
             deleteTask(tasks);
         }
         else if (choice == 5) {
-            cout << "Goodbye!\n";
+            saveTasks(tasks);          // Save before exiting
+            cout << "Tasks saved. Goodbye!\n";
             break;
         }
         else {
@@ -101,7 +109,7 @@ void listTasks(const vector<Task>& tasks) {
     }
 
     cout << "\n----- Your Tasks -----\n";
-    for (int i = 0; i < tasks.size(); i++) {
+    for (size_t i = 0; i < tasks.size(); i++) {
         tasks[i].display(i + 1);
     }
 }
@@ -162,4 +170,47 @@ void deleteTask(vector<Task>& tasks) {
 
     tasks.erase(tasks.begin() + (index - 1));
     cout << "Task deleted successfully!\n";
+}
+
+// ---------- File Operations ----------
+
+void saveTasks(const vector<Task>& tasks) {
+    ofstream file("tasks.txt");
+
+    if (!file.is_open()) {
+        cout << "Error: Could not save tasks.\n";
+        return;
+    }
+
+    for (size_t i = 0; i < tasks.size(); i++) {
+        // Format: 0 or 1 (completed) followed by the description
+        file << (tasks[i].isCompleted() ? "1" : "0") << " "
+             << tasks[i].getDescription() << endl;
+    }
+
+    file.close();
+}
+
+void loadTasks(vector<Task>& tasks) {
+    ifstream file("tasks.txt");
+
+    if (!file.is_open()) {
+        // No file yet – that's fine for the first run
+        return;
+    }
+
+    string line;
+    while (getline(file, line)) {
+        if (line.empty()) continue;
+
+        // First character is 0 or 1
+        bool isCompleted = (line[0] == '1');
+        // The rest after the space is the description
+        string description = line.substr(2);
+
+        tasks.push_back(Task(description, isCompleted));
+    }
+
+    file.close();
+    cout << "Loaded " << tasks.size() << " task(s) from file.\n\n";
 }
