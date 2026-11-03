@@ -76,19 +76,27 @@ void loadTasks(vector<Task>& tasks);
 // main
 // ------------------------------------------------------------
 int main() {
-    vector<Task> tasks;   // Holds all the tasks
+    vector<Task> tasks;
 
     // Load any previously saved tasks when the program starts
     loadTasks(tasks);
 
     int choice = 0;
 
-    // Main program loop – keeps running until the user chooses Exit
     while (true) {
         showMenu();
         cout << "Enter your choice: ";
         cin >> choice;
-        cin.ignore(10000, '\n');   // Clear the leftover newline
+
+        // Handle non-numeric input (prevents infinite loop)
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout << "Invalid input. Please enter a number.\n\n";
+            continue;
+        }
+
+        cin.ignore(10000, '\n');   // clear the leftover newline
 
         if (choice == 1) {
             addTask(tasks);
@@ -103,7 +111,7 @@ int main() {
             deleteTask(tasks);
         }
         else if (choice == 5) {
-            saveTasks(tasks);               // Save before leaving
+            saveTasks(tasks);
             cout << "Tasks saved. Goodbye!\n";
             break;
         }
@@ -111,12 +119,11 @@ int main() {
             cout << "Invalid choice. Please try again.\n";
         }
 
-        cout << endl;   // Blank line for cleaner output
+        cout << endl;
     }
 
     return 0;
 }
-
 // ------------------------------------------------------------
 // Displays the main menu
 // ------------------------------------------------------------
