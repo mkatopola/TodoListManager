@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <filesystem> 
 
 using namespace std;
 
@@ -247,28 +248,60 @@ void saveTasks(const vector<Task>& tasks) {
 }
 
 // ------------------------------------------------------------
-// Load tasks from a file (user provides the name)
+// Load tasks from a file
+// Shows a list of available .txt files so the user can choose
 // ------------------------------------------------------------
 void loadTasks(vector<Task>& tasks) {
-    string filename;
-    cout << "Enter filename: ";
-    getline(cin, filename);
+    // We need C++17 for filesystem
+    #include <filesystem>   // Make sure this is at the top of the file with the other includes
+    namespace fs = std::filesystem;
 
-    if (filename.empty()) {
-        cout << "Filename cannot be empty.\n";
+    vector<string> files;
+
+    // Collect all .txt files in the current folder
+    for (const auto& entry : fs::directory_iterator(".")) {
+        if (entry.is_regular_file()) {
+            string filename = entry.path().filename().string();
+            if (filename.size() > 4 && filename.substr(filename.size() - 4) == ".txt") {
+                files.push_back(filename);
+            }
+        }
+    }
+
+    // No files found
+    if (files.empty()) {
+        cout << "No saved task files found.\n";
         return;
     }
 
-    filename += ".txt";
+    // Show available files
+    cout << "\n----- Available Task Files -----\n";
+    for (size_t i = 0; i < files.size(); i++) {
+        cout << (i + 1) << ". " << files[i] << endl;
+    }
 
+    // Ask user to choose
+    int choice;
+    cout << "\nEnter the number of the file to load: ";
+    cin >> choice;
+    cin.ignore(10000, '\n');
+
+    if (choice < 1 || choice > static_cast<int>(files.size())) {
+        cout << "Invalid selection.\n";
+        return;
+    }
+
+    string filename = files[choice - 1];
+
+    // Open and load the selected file
     ifstream file(filename);
 
     if (!file.is_open()) {
-        cout << "Error: Could not open the file \"" << filename << "\".\n";
+        cout << "Error: Could not open the file.\n";
         return;
     }
 
-    // Clear current tasks before loading new ones
+    // Clear current tasks before loading
     tasks.clear();
 
     string line;
