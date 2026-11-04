@@ -3,46 +3,62 @@
 //  CSE 310 - Applied Programming (Module 1: C++)
 //  Author: Moffat Katopola
 // ============================================================
+//  Demonstrates:
+//  - Variables, expressions, conditionals, loops
+//  - Functions and classes
+//  - STL vector
+//  - Reading from and writing to a file
+// ============================================================
 
 #include <iostream>
 #include <string>
 #include <vector>
 #include <fstream>
-#include <filesystem> 
+#include <filesystem>
 
 using namespace std;
+namespace fs = std::filesystem;
 
 // ------------------------------------------------------------
 // Task class
 // ------------------------------------------------------------
-class Task {
+class Task
+{
 private:
     string description;
     bool completed;
 
 public:
-    Task(const string& desc, bool isCompleted = false) {
+    Task(const string &desc, bool isCompleted = false)
+    {
         description = desc;
         completed = isCompleted;
     }
 
-    void markComplete() {
+    void markComplete()
+    {
         completed = true;
     }
 
-    bool isCompleted() const {
+    bool isCompleted() const
+    {
         return completed;
     }
 
-    string getDescription() const {
+    string getDescription() const
+    {
         return description;
     }
 
-    void display(int index) const {
+    void display(int index) const
+    {
         cout << index << ". ";
-        if (completed) {
+        if (completed)
+        {
             cout << "[X] ";
-        } else {
+        }
+        else
+        {
             cout << "[ ] ";
         }
         cout << description << endl;
@@ -50,30 +66,33 @@ public:
 };
 
 // ------------------------------------------------------------
-// Function prototypes
+// Function declarations
 // ------------------------------------------------------------
 void showMenu();
-void listTasks(const vector<Task>& tasks);
-void addTask(vector<Task>& tasks);
-void completeTask(vector<Task>& tasks);
-void deleteTask(vector<Task>& tasks);
-void saveTasks(const vector<Task>& tasks);
-void loadTasks(vector<Task>& tasks);
+void listTasks(const vector<Task> &tasks);
+void addTask(vector<Task> &tasks);
+void completeTask(vector<Task> &tasks);
+void deleteTask(vector<Task> &tasks);
+void saveTasks(const vector<Task> &tasks);
+void loadTasks(vector<Task> &tasks);
 
 // ------------------------------------------------------------
-// main
+// Main function
 // ------------------------------------------------------------
-int main() {
+int main()
+{
     vector<Task> tasks;
     int choice = 0;
 
-    while (true) {
+    while (true)
+    {
         showMenu();
         cout << "Enter your choice: ";
         cin >> choice;
 
         // Protect against non-numeric input
-        if (cin.fail()) {
+        if (cin.fail())
+        {
             cin.clear();
             cin.ignore(10000, '\n');
             cout << "Invalid input. Please enter a number.\n\n";
@@ -82,29 +101,37 @@ int main() {
 
         cin.ignore(10000, '\n');
 
-        if (choice == 1) {
+        if (choice == 1)
+        {
             addTask(tasks);
         }
-        else if (choice == 2) {
+        else if (choice == 2)
+        {
             loadTasks(tasks);
         }
-        else if (choice == 3) {
+        else if (choice == 3)
+        {
             listTasks(tasks);
         }
-        else if (choice == 4) {
+        else if (choice == 4)
+        {
             completeTask(tasks);
         }
-        else if (choice == 5) {
+        else if (choice == 5)
+        {
             deleteTask(tasks);
         }
-        else if (choice == 6) {
+        else if (choice == 6)
+        {
             saveTasks(tasks);
         }
-        else if (choice == 7) {
+        else if (choice == 7)
+        {
             cout << "Goodbye!\n";
             break;
         }
-        else {
+        else
+        {
             cout << "Invalid choice. Please try again.\n";
         }
 
@@ -115,9 +142,10 @@ int main() {
 }
 
 // ------------------------------------------------------------
-// Menu
+// Menu items
 // ------------------------------------------------------------
-void showMenu() {
+void showMenu()
+{
     cout << "===== To-Do List Manager =====\n";
     cout << "1. Add Task\n";
     cout << "2. Load Tasks\n";
@@ -129,29 +157,34 @@ void showMenu() {
 }
 
 // ------------------------------------------------------------
-// List all tasks
+// Listing all tasks
 // ------------------------------------------------------------
-void listTasks(const vector<Task>& tasks) {
-    if (tasks.empty()) {
+void listTasks(const vector<Task> &tasks)
+{
+    if (tasks.empty())
+    {
         cout << "No tasks yet.\n";
         return;
     }
 
     cout << "\n----- Your Tasks -----\n";
-    for (size_t i = 0; i < tasks.size(); i++) {
+    for (size_t i = 0; i < tasks.size(); i++)
+    {
         tasks[i].display(i + 1);
     }
 }
 
 // ------------------------------------------------------------
-// Add a new task
+// Adding a new task
 // ------------------------------------------------------------
-void addTask(vector<Task>& tasks) {
+void addTask(vector<Task> &tasks)
+{
     string description;
     cout << "Enter task description: ";
     getline(cin, description);
 
-    if (description.empty()) {
+    if (description.empty())
+    {
         cout << "Task description cannot be empty.\n";
         return;
     }
@@ -161,10 +194,12 @@ void addTask(vector<Task>& tasks) {
 }
 
 // ------------------------------------------------------------
-// Mark a task as complete
+// Marking a task as complete
 // ------------------------------------------------------------
-void completeTask(vector<Task>& tasks) {
-    if (tasks.empty()) {
+void completeTask(vector<Task> &tasks)
+{
+    if (tasks.empty())
+    {
         cout << "No tasks to complete.\n";
         return;
     }
@@ -176,7 +211,8 @@ void completeTask(vector<Task>& tasks) {
     cin >> index;
     cin.ignore(10000, '\n');
 
-    if (index < 1 || index > static_cast<int>(tasks.size())) {
+    if (index < 1 || index > static_cast<int>(tasks.size()))
+    {
         cout << "Invalid task number.\n";
         return;
     }
@@ -186,10 +222,12 @@ void completeTask(vector<Task>& tasks) {
 }
 
 // ------------------------------------------------------------
-// Delete a task
+// Deleting a task
 // ------------------------------------------------------------
-void deleteTask(vector<Task>& tasks) {
-    if (tasks.empty()) {
+void deleteTask(vector<Task> &tasks)
+{
+    if (tasks.empty())
+    {
         cout << "No tasks to delete.\n";
         return;
     }
@@ -201,7 +239,8 @@ void deleteTask(vector<Task>& tasks) {
     cin >> index;
     cin.ignore(10000, '\n');
 
-    if (index < 1 || index > static_cast<int>(tasks.size())) {
+    if (index < 1 || index > static_cast<int>(tasks.size()))
+    {
         cout << "Invalid task number.\n";
         return;
     }
@@ -211,34 +250,81 @@ void deleteTask(vector<Task>& tasks) {
 }
 
 // ------------------------------------------------------------
-// Save tasks to a file (user provides the name)
+// Saving tasks to a file
+// Shows existing files and warns before overwriting
 // ------------------------------------------------------------
-void saveTasks(const vector<Task>& tasks) {
-    if (tasks.empty()) {
+void saveTasks(const vector<Task> &tasks)
+{
+    if (tasks.empty())
+    {
         cout << "No tasks to save.\n";
         return;
     }
 
+    // Collect existing .txt files
+    vector<string> files;
+    for (const auto &entry : fs::directory_iterator("."))
+    {
+        if (entry.is_regular_file())
+        {
+            string filename = entry.path().filename().string();
+            if (filename.size() > 4 && filename.substr(filename.size() - 4) == ".txt")
+            {
+                files.push_back(filename);
+            }
+        }
+    }
+
+    // Showing existing files
+    if (!files.empty())
+    {
+        cout << "\n----- Existing Task Files -----\n";
+        for (size_t i = 0; i < files.size(); i++)
+        {
+            cout << (i + 1) << ". " << files[i] << endl;
+        }
+        cout << endl;
+    }
+
+    // Asking for filename
     string filename;
-    cout << "Enter filename: ";
+    cout << "Enter filename (without extension): ";
     getline(cin, filename);
 
-    if (filename.empty()) {
+    if (filename.empty())
+    {
         cout << "Filename cannot be empty.\n";
         return;
     }
 
-    // Add .txt extension automatically
     filename += ".txt";
 
+    // Warning if file already exists
+    if (fs::exists(filename))
+    {
+        char confirm;
+        cout << "File \"" << filename << "\" already exists. Overwrite? (y/n): ";
+        cin >> confirm;
+        cin.ignore(10000, '\n');
+
+        if (confirm != 'y' && confirm != 'Y')
+        {
+            cout << "Save cancelled.\n";
+            return;
+        }
+    }
+
+    // Creating the file
     ofstream file(filename);
 
-    if (!file.is_open()) {
+    if (!file.is_open())
+    {
         cout << "Error: Could not create the file.\n";
         return;
     }
 
-    for (size_t i = 0; i < tasks.size(); i++) {
+    for (size_t i = 0; i < tasks.size(); i++)
+    {
         file << (tasks[i].isCompleted() ? "1" : "0") << " "
              << tasks[i].getDescription() << endl;
     }
@@ -248,35 +334,36 @@ void saveTasks(const vector<Task>& tasks) {
 }
 
 // ------------------------------------------------------------
-// Load tasks from a file
-// Shows a list of available .txt files so the user can choose
+// Loading tasks from a file
+// Shows available .txt files and lets the user choose
 // ------------------------------------------------------------
-void loadTasks(vector<Task>& tasks) {
-    // We need C++17 for filesystem
-    #include <filesystem>   // Make sure this is at the top of the file with the other includes
-    namespace fs = std::filesystem;
-
+void loadTasks(vector<Task> &tasks)
+{
     vector<string> files;
 
-    // Collect all .txt files in the current folder
-    for (const auto& entry : fs::directory_iterator(".")) {
-        if (entry.is_regular_file()) {
+    // Collect all .txt files
+    for (const auto &entry : fs::directory_iterator("."))
+    {
+        if (entry.is_regular_file())
+        {
             string filename = entry.path().filename().string();
-            if (filename.size() > 4 && filename.substr(filename.size() - 4) == ".txt") {
+            if (filename.size() > 4 && filename.substr(filename.size() - 4) == ".txt")
+            {
                 files.push_back(filename);
             }
         }
     }
 
-    // No files found
-    if (files.empty()) {
+    if (files.empty())
+    {
         cout << "No saved task files found.\n";
         return;
     }
 
     // Show available files
     cout << "\n----- Available Task Files -----\n";
-    for (size_t i = 0; i < files.size(); i++) {
+    for (size_t i = 0; i < files.size(); i++)
+    {
         cout << (i + 1) << ". " << files[i] << endl;
     }
 
@@ -286,27 +373,30 @@ void loadTasks(vector<Task>& tasks) {
     cin >> choice;
     cin.ignore(10000, '\n');
 
-    if (choice < 1 || choice > static_cast<int>(files.size())) {
+    if (choice < 1 || choice > static_cast<int>(files.size()))
+    {
         cout << "Invalid selection.\n";
         return;
     }
 
     string filename = files[choice - 1];
 
-    // Open and load the selected file
     ifstream file(filename);
 
-    if (!file.is_open()) {
+    if (!file.is_open())
+    {
         cout << "Error: Could not open the file.\n";
         return;
     }
 
-    // Clear current tasks before loading
+    // Clear current list before loading
     tasks.clear();
 
     string line;
-    while (getline(file, line)) {
-        if (line.empty()) continue;
+    while (getline(file, line))
+    {
+        if (line.empty())
+            continue;
 
         bool isCompleted = (line[0] == '1');
         string description = line.substr(2);
