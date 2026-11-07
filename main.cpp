@@ -288,7 +288,7 @@ void saveTasks(const vector<Task> &tasks)
 
     // Asking for filename
     string filename;
-    cout << "Enter filename (without extension): ";
+    cout << "Enter filename: ";
     getline(cin, filename);
 
     if (filename.empty())
