@@ -17,7 +17,12 @@ It demonstrates key C++ concepts including classes, the Standard Template Librar
 
 # Software Demo Video
 
-[Software Demo Video](http://youtube.link.goes.here)
+[Software Demo Video](https://youtu.be/Zt5mctaNXv4)
+
+
+# Source Code GitHub Link
+
+[GitHub Link](https://github.com/mkatopola/TodoListManager)
 
 
 # Development Environment
@@ -48,3 +53,4 @@ It demonstrates key C++ concepts including classes, the Standard Template Librar
 - Add the ability to edit an existing task description
 - Support task priorities or due dates
 - Allow loading multiple files and merging them
+- Make the program modular and use inheritance to make everything work together
